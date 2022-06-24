@@ -6,7 +6,7 @@
 /*   By: jting <jting@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 12:42:55 by jting             #+#    #+#             */
-/*   Updated: 2022/06/24 16:48:12 by jting            ###   ########.fr       */
+/*   Updated: 2022/06/24 17:24:38 by jting            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ typedef struct s_philo
 
 int		init_struct(t_thread *data, int ac, char **av);
 long	get_time(void);
-void	looping(t_thread data);
+void	*looping(t_thread data);
+void	eat(t_thread *data, int phil);
 
 #endif

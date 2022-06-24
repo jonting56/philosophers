@@ -6,7 +6,7 @@
 /*   By: jting <jting@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 12:48:48 by jting             #+#    #+#             */
-/*   Updated: 2022/06/24 16:34:20 by jting            ###   ########.fr       */
+/*   Updated: 2022/06/24 17:16:16 by jting            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,9 +88,9 @@ int	init_struct(t_thread *data, int ac, char **av)
 		data->times_eaten = -1;
 	while (++i < philo_atoi(av[1]))
 	{
-		pthread_create(*data->philos.thread_id[i], NULL, looping, &data->philos[i]);
+		pthread_create(data->philos.thread_id[i], NULL, looping, &data->philos[i]);
 		data->philos[i].fork = 1;
-		pthread_mutex_init(&data->philos[i].forks, NULL);
+		pthread_mutex_init(&data->philos[i].fork, NULL);
 	}
 	return (1);
 }

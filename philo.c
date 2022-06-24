@@ -6,7 +6,7 @@
 /*   By: jting <jting@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 12:48:00 by jting             #+#    #+#             */
-/*   Updated: 2022/06/24 15:02:55 by jting            ###   ########.fr       */
+/*   Updated: 2022/06/24 17:16:58 by jting            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,5 +29,5 @@ int	main(int ac, char **av)
 	i = 0;
 	if (!init_struct)
 		return (0);
-	looping(&data);
+	looping(data);
 }
