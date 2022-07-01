@@ -6,7 +6,7 @@
 /*   By: jting <jting@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 12:48:48 by jting             #+#    #+#             */
-/*   Updated: 2022/06/24 17:16:16 by jting            ###   ########.fr       */
+/*   Updated: 2022/07/01 11:58:29 by jting            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,50 +49,16 @@ static	int	isnum(int ac, char **av)
 	}
 	return (1);
 }
-
-long	get_time(void)
+// Returns the amount of time since the launch of the program
+long long	get_time(void)
 {
 	struct timeval			current;
-	static struct timeval	*initial = NULL;
 
-	if (!initial)
-	{
-		initial = malloc(sizeof(initial));
-		gettimeofday(initial, NULL);
-	}
-	else
-	{
-		gettimeofday(&current, NULL);
-		return (((current.tv_sec) * 1000 + (current.tv_usec) / 1000)
-			- ((initial->tv_sec) * 1000 + (initial->tv_usec) / 1000));
-	}
-	return (0);
+	gettimeofday(&current, NULL);
+	return ((current.tv_sec * 1000) + (current.tv_usec / 1000));
 }
 
-int	init_struct(t_thread *data, int ac, char **av)
+long long	time_diff(long long prev, long long cur)
 {
-	int	i;
-
-	i = -1;
-	if ((ac < 5 || ac > 6) || !isnum(ac, av))
-		return (0);
-	data = malloc(sizeof(t_thread));
-	data->philo_num = phil_atoi(1);
-	data->time_to_die = phil_atoi(2);
-	data->time_to_eat = phil_atoi(3);
-	data->time_to_sleep = phil_atoi(4);
-	data->is_alive = 1;
-	if (ac == 5)
-		data->times_eaten = phil_atoi(5);
-	else
-		data->times_eaten = -1;
-	while (++i < philo_atoi(av[1]))
-	{
-		pthread_create(data->philos.thread_id[i], NULL, looping, &data->philos[i]);
-		data->philos[i].fork = 1;
-		pthread_mutex_init(&data->philos[i].fork, NULL);
-	}
-	return (1);
+	return (cur - prev);
 }
-
-int init_philo(t_thread *data, int ac, char **av)

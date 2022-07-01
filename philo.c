@@ -6,7 +6,7 @@
 /*   By: jting <jting@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 12:48:00 by jting             #+#    #+#             */
-/*   Updated: 2022/06/24 17:16:58 by jting            ###   ########.fr       */
+/*   Updated: 2022/06/29 15:04:47 by jting            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	one_philo(int ac, char **av)
 
 int	main(int ac, char **av)
 {
-	t_thread	*data;
+	t_rules		*data;
 	int			i;
 
 	i = 0;

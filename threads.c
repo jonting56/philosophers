@@ -6,38 +6,47 @@
 /*   By: jting <jting@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 12:57:16 by jting             #+#    #+#             */
-/*   Updated: 2022/06/24 17:24:37 by jting            ###   ########.fr       */
+/*   Updated: 2022/07/01 10:51:38 by jting            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
 
-void	eat(t_thread *data, int	phil)
+void	eat(t_philo	*phils, int phil)
 {
-	long	time_since_eat;
+	t_rules	*rule;
 
-	pthread_mutex_lock(&data->philos[phil]);
-	pthread_mutex_lock(&data->philos[phil + 1]);
+	rule = phils->rules;
+	pthread_mutex_lock(&rule->forks[phils->left_fork]);
+	pthread_mutex_lock(&rule->forks[phils->right_fork]);
+	printf("%lims	%i has taken a fork\n", get_time(), phils->id);
+	printf("%lims	%i has taken a fork\n", get_time(), phils->id);
+	printf("%lims	%i is eating\n", phil);
+	phils->eat_time = get_time();
+	usleep(phils->eat_time * 1000);
+	pthread_mutex_unlock(&rule->forks[phils->left_fork]);
+	pthread_mutex_unlock(&rule->forks[phils->right_fork]);
+	printf("%lims	%i is thinking\n", get_time(), phils->id);
+	(phils->each_eat)++;
 }
 
-// For each philosopher that is initiated it will need to initially check
+/* For each philosopher that is initiated it will need to initially check
 // if there are any forks available. If there is it will take the fork and 
-// eat for x ms while muting the data. 
-
-void	*looping(t_thread *data)
+ eat for x ms while muting the data. 
+*/
+void	*looping(t_rules	*data)
 {
-	int	num;
+	t_rules		*rules;
+	t_philo		*phils;
 
-	num = (data->philo_num);
-	while (data->is_alive && data->times_eaten != 0)
+	if (philos->id % 2)
+		usleep(10000);
+	while (data->is_alive)
 	{
-		while (data->is_alive)
-		{
-			//if (data->time_to_die < get_time())
-				//philo_died();
-
-		}
 		eat(data, data->philo_num);
+		if (data->all_eaten)
+			break ;
+		printf("%lims	%i is sleeping\n", get_time(), phils->id);
 	}	
 }
