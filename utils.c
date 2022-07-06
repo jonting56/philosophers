@@ -6,7 +6,7 @@
 /*   By: jting <jting@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 12:48:48 by jting             #+#    #+#             */
-/*   Updated: 2022/07/01 11:58:29 by jting            ###   ########.fr       */
+/*   Updated: 2022/07/06 15:43:53 by jting            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,9 @@ static	int	isnum(int ac, char **av)
 	}
 	return (1);
 }
-// Returns the amount of time since the launch of the program
+
+// Returns the time at point use
+
 long long	get_time(void)
 {
 	struct timeval			current;
@@ -58,7 +60,23 @@ long long	get_time(void)
 	return ((current.tv_sec * 1000) + (current.tv_usec / 1000));
 }
 
+// Returns time diff
+
 long long	time_diff(long long prev, long long cur)
 {
 	return (cur - prev);
 }
+
+void	phi_sleep(long long time, t_rules *r)
+{
+	long long	i;
+
+	i = get_time();
+	while (!(r->is_alive))
+	{
+		if (time_diff(i, get_time()) >= time)
+			break ;
+		usleep(100);
+	}
+}
+

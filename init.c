@@ -6,7 +6,7 @@
 /*   By: jting <jting@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 14:35:41 by jting             #+#    #+#             */
-/*   Updated: 2022/06/29 17:00:03 by jting            ###   ########.fr       */
+/*   Updated: 2022/07/06 15:20:39 by jting            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,10 @@
 
 int	phil_init(t_rules *data)
 {
-	int	i;
+	int		i;
+	t_philo	*phi;
 
+	phi = data->philos;
 	i = data->philo_num;
 	while (--i >= 0)
 	{
@@ -24,11 +26,25 @@ int	phil_init(t_rules *data)
 		data->philos[i].right_fork = (i + 1) % i;
 		data->philos[i].rules = data;
 		data->philos[i].eat_time = 0;
-		pthread_mutex_init(&(data->forks[i]), NULL);
 	}
 	return (1);
 }
 
+int	init_mutex(t_rules *r)
+{
+	int	i;
+
+	i = r->philo_num;
+	while (--i >= 0)
+	{
+		if (pthread_mutex_init(&(r->forks[i]), NULL))
+			return (1);
+	}
+	if (pthread_mutex_init(&(r->eaten_meal), NULL))
+		return (1);
+	if (pthread_mutex_init(&(r->writing), NULL))
+		return (1);
+}
 
 int	init_struct(t_rules *data, int ac, char **av)
 {
@@ -45,10 +61,12 @@ int	init_struct(t_rules *data, int ac, char **av)
 	data->is_alive = 1;
 	data->all_eaten = 0;
 	if (ac == 5)
-		data->time_to_eat = phil_atoi(5);
+		data->times_eaten = phil_atoi(5);
 	else
-		data->time_to_eat = -1;
+		data->times_eaten = -1;
 	if (!phil_init(data))
+		return (0);
+	if (!init_mutex(data))
 		return (0);
 	return (1);
 }
