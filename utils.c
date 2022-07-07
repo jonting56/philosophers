@@ -6,16 +6,16 @@
 /*   By: jting <jting@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 12:48:48 by jting             #+#    #+#             */
-/*   Updated: 2022/07/06 15:43:53 by jting            ###   ########.fr       */
+/*   Updated: 2022/07/07 16:16:41 by jting            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static long	phil_atoi(char *s)
+int	phil_atoi(char *s)
 {
-	long	result;
-	int		i;
+	int	result;
+	int	i;
 
 	i = 0;
 	result = 0;
@@ -28,26 +28,6 @@ static long	phil_atoi(char *s)
 		i++;
 	}
 	return (result);
-}
-
-static	int	isnum(int ac, char **av)
-{
-	int	i;
-	int	j;
-
-	i = 1;
-	while (av[i])
-	{
-		j = 0;
-		while (av[i][j])
-		{
-			if (av[i][j] > '9' && av[i][j] < '0')
-				return (0);
-			j++;
-		}
-		i++;
-	}
-	return (1);
 }
 
 // Returns the time at point use
@@ -76,7 +56,27 @@ void	phi_sleep(long long time, t_rules *r)
 	{
 		if (time_diff(i, get_time()) >= time)
 			break ;
-		usleep(100);
+		usleep(50);
 	}
 }
 
+int	isnum(char **av)
+{
+	int		i;
+	int		j;
+
+	i = 1;
+	while (av[i])
+	{
+		j = 0;
+		while (av[i][j])
+		{
+			if (av[i][j] <= '9' && av[i][j] >= '0')
+				j++;
+			else
+				return (0);
+		}
+		i++;
+	}
+	return (1);
+}

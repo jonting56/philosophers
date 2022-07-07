@@ -6,7 +6,7 @@
 /*   By: jting <jting@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 12:48:00 by jting             #+#    #+#             */
-/*   Updated: 2022/07/06 15:45:27 by jting            ###   ########.fr       */
+/*   Updated: 2022/07/07 14:40:49 by jting            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,14 @@ void	death_check(t_rules *r, t_philo *p)
 
 int	main(int ac, char **av)
 {
-	t_rules		*data;
-	int			i;
+	t_rules		rules;
 
-	i = 0;
-	if (!init_struct(data, ac, av))
+	if (!init_struct(&rules, ac, av))
+	{
+		printf("Please enter correct variables\n");
 		return (0);
-	if (!feastin(data))
+	}
+	printf("Prefeast\n");
+	if (!feastin(&rules))
 		return (0);
 }
