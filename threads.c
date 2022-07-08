@@ -6,7 +6,7 @@
 /*   By: jting <jting@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 12:57:16 by jting             #+#    #+#             */
-/*   Updated: 2022/07/07 16:20:18 by jting            ###   ########.fr       */
+/*   Updated: 2022/07/08 16:25:03 by jting            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,11 @@ void	thread_exit(t_rules *r, t_philo *phil)
 	int	i;
 
 	i = 0;
-	while (i < r->philo_num)
-	{
+	while (++i <= r->philo_num)
 		pthread_join(phil[i].thread_id, NULL);
-		i++;
-	}
 	i = 0;
-	while (i < r->philo_num)
-	{
+	while (++i <= r->philo_num)
 		pthread_mutex_destroy(&(r->forks[i]));
-		i++;
-	}
 	pthread_mutex_destroy(&(r->writing));
 }
 
@@ -37,21 +31,18 @@ void	eat(t_philo	*phils)
 
 	rule = phils->rules;
 	pthread_mutex_lock(&rule->forks[phils->left_fork]);
+	action_dis(rule, phils->id, "has taken a fork");
 	pthread_mutex_lock(&rule->forks[phils->right_fork]);
-	printf("%llims	%i has taken a fork\n",
-		time_diff(phils->eat_time, get_time()), phils->id);
-	printf("%llims	%i has taken a fork\n",
-		time_diff(phils->eat_time, get_time()), phils->id);
+	action_dis(rule, phils->id, "has taken a fork");
 	pthread_mutex_lock(&(rule->eaten_meal));
-	printf("%llims	%i is eating\n",
-		time_diff(phils->eat_time, get_time()), phils->id);
+	action_dis(rule, phils->id, "is eating");
 	phils->eat_time = get_time();
 	pthread_mutex_unlock(&(rule->eaten_meal));
-	phi_sleep(rule->time_to_eat, get_time());
+	action_dis(rule, phils->id, "is sleeping");
+	phi_sleep(rule->time_to_sleep, phils);
+	(phils->x_eaten)++;
 	pthread_mutex_unlock(&rule->forks[phils->left_fork]);
 	pthread_mutex_unlock(&rule->forks[phils->right_fork]);
-	printf("%llims	%i is thinking\n", get_time(), phils->id);
-	(phils->each_eat)++;
 }
 
 /* For each philosopher that is initiated it will need to initially check
@@ -67,15 +58,13 @@ void	*threads(void	*ph)
 	r = phils->rules;
 	if (phils->id % 2)
 		usleep(15000);
-	printf("%d pre-eat\n", phils->id);
 	while (r->is_alive)
 	{	
 		eat(phils);
 		if (r->all_eaten)
 			break ;
-		action_dis(r, phils->id, "is sleeping\n");
-		phi_sleep(phils->eat_time, r);
-		action_dis(r, phils->id, "is thinking\n");
+		phi_sleep(phils->eat_time, phils);
+		action_dis(r, phils->id, "is thinking");
 	}
 	return (NULL);
 }
@@ -102,9 +91,9 @@ int	feastin(t_rules	*r)
 void	action_dis(t_rules *r, int id, char *s)
 {
 	pthread_mutex_lock(&(r->writing));
-	if (!(r->is_alive))
+	if (r->is_alive)
 	{
-		printf("%lli ", get_time() - r->first_time);
+		printf("%llims	", get_time() - r->first_time);
 		printf("%i ", id);
 		printf("%s\n", s);
 	}

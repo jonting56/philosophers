@@ -6,7 +6,7 @@
 /*   By: jting <jting@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 14:35:41 by jting             #+#    #+#             */
-/*   Updated: 2022/07/07 15:41:01 by jting            ###   ########.fr       */
+/*   Updated: 2022/07/08 16:16:13 by jting            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,16 @@
 int	phil_init(t_rules *rules)
 {
 	int		i;
-	t_philo	*phi;
 
-	phi = rules->philos;
-	i = 1;
-	while (i <= rules->philo_num)
+	i = rules->philo_num + 1;
+	while (--i > 0)
 	{
 		rules->philos[i].id = i;
 		rules->philos[i].left_fork = i;
-		rules->philos[i].right_fork = (i + 1) % i;
+		rules->philos[i].right_fork = (i + 1) % rules->philo_num;
 		rules->philos[i].rules = rules;
+		rules->philos[i].x_eaten = 0;
 		rules->philos[i].eat_time = 0;
-		i++;
 	}
 	return (1);
 }
@@ -35,12 +33,12 @@ int	init_mutex(t_rules *r)
 {
 	int	i;
 
-	i = 1;
-	while (i <= r->philo_num)
+	i = r->philo_num + 1;
+	while (--i > 0)
 	{
+		printf("%d mutes made\n", i);
 		if (pthread_mutex_init(&(r->forks[i]), NULL))
 			return (0);
-		i++;
 	}
 	if (pthread_mutex_init(&(r->eaten_meal), NULL))
 		return (0);
@@ -63,9 +61,9 @@ int	init_struct(t_rules *rules, int ac, char **av)
 		rules->times_eaten = phil_atoi(av[5]);
 	else
 		rules->times_eaten = -1;
-	if (!phil_init(rules))
-		return (0);
 	if (!init_mutex(rules))
+		return (0);
+	if (!phil_init(rules))
 		return (0);
 	return (1);
 }
